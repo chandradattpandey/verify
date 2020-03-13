@@ -5,11 +5,11 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 passport.use(new FacebookStrategy({
   clientID: '198234414841456',
   clientSecret: '057e72542b4534f7b93bc6c3a9d628d8',
-  callbackURL: "https://manish-fbgt.herokuapp.com/auth/facebook/callback",
+  callbackURL: "https://chandra-verify.herokuapp.com/auth/facebook/callback",
   profileFields: ['id', 'displayName', 'photos', 'email','profileUrl']
 },
 function(accessToken, refreshToken, profile, cb){
- 
+
  return cb(null,profile);
 }
 ));
