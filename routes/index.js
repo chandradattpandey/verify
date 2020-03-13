@@ -9,7 +9,7 @@ passport.use(new FacebookStrategy({
   profileFields: ['id', 'displayName', 'photos', 'email','profileUrl']
 },
 function(accessToken, refreshToken, profile, cb){
-
+ 
  return cb(null,profile);
 }
 ));
@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
   res.render('register.html');
 });
 
-  
+
 router.get('/auth/facebook', passport.authenticate('facebook'));
 
 
