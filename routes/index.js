@@ -43,15 +43,15 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
 
 
 passport.use(new GoogleStrategy({
-  clientID:'937522865024-ctk5jrpv06roe247dcdbkv0mdfsgr039.apps.googleusercontent.com',
-  clientSecret: 'tdZO63XF-aRqObM8g00ULSzT',
-  callbackURL: "https://chandra-verify.herokuapp.com/auth/google/callback",
-  passReqToCallback   : true
+  clientID:     '937522865024-8hhe6d25vfv3c830v36a6se293mrif86.apps.googleusercontent.com',
+  clientSecret: 'cI9FiFrWb0uurwC0Rm17CKBE',
+  callbackURL: "https://chandra-verify.herokuapp.com/auth/google/callback"
 },
-  function (accessToken, refreshToken, profile, done) {
-
+function(accessToken, refreshToken, profile, done) {
+ 
     return done(null, profile);
-  }
+  
+}
 ));
 
 router.get('/auth/google',
