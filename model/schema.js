@@ -10,4 +10,4 @@ const UserSchema = new Schema({
 });
 
 
-module.exports = mongoose.model('admin',UserSchema);
+module.exports = mongoose.model('ad',UserSchema);

@@ -42,11 +42,11 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
   let id = user.id;
   let profilepic = user._json.picture.url;
 
-  userSchema.find({ $or: [{ 'email': email }, { 'id': id }] }, (err, result) => {
+  userSchema.find({ $or: [{ 'email': email }, { 'f_id': id }] }, (err, result) => {
     if (err) {
       console.log(err);
     } else if (result.length == 0) {
-      let newuser = new userSchema({ 'name': this.name, '_id': id, 'profilepic': profilepic })
+      let newuser = new userSchema({ 'name': name, 'f_id': id, 'profilepic': profilepic })
       newuser.save((err) => {
         if (err) {
           console.log(err);
