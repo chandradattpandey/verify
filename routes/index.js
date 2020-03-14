@@ -45,7 +45,8 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
 passport.use(new GoogleStrategy({
   clientID:' 937522865024-8hhe6d25vfv3c830v36a6se293mrif86.apps.googleusercontent.com',
   clientSecret: 'cI9FiFrWb0uurwC0Rm17CKBE',
-  callbackURL: "https://chandra-verify.herokuapp.com/auth/google/callback"
+  callbackURL: "https://chandra-verify.herokuapp.com/auth/google/callback",
+  passReqToCallback   : true
 },
   function (accessToken, refreshToken, profile, done) {
 
@@ -54,7 +55,8 @@ passport.use(new GoogleStrategy({
 ));
 
 router.get('/auth/google',
-  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
+  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login',
+  , 'https://www.googleapis.com/auth/plus.profile.emails.read','email','profile'] }));
 
 router.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
