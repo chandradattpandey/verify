@@ -34,7 +34,7 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
   failureRedirect: '/login'
 }), (req, res) => {
   console.log("PPPPPPPPPPPPPPPPPPPPPPPP", req.user);
-  res.send('Success Loged In')
+  res.json(req.user)
 });
 
 
@@ -42,25 +42,25 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
 // google
 
 
-// passport.use(new GoogleStrategy({
-//   clientID: GOOGLE_CLIENT_ID,
-//   clientSecret: GOOGLE_CLIENT_SECRET,
-//   callbackURL: "http://www.example.com/auth/google/callback"
-// },
-//   function (accessToken, refreshToken, profile, done) {
+passport.use(new GoogleStrategy({
+  clientID: GOOGLE_CLIENT_ID,
+  clientSecret: GOOGLE_CLIENT_SECRET,
+  callbackURL: "http://www.example.com/auth/google/callback"
+},
+  function (accessToken, refreshToken, profile, done) {
 
-//     return done(err, user);
-//   }
-// ));
+    return done(err, user);
+  }
+));
 
-// app.get('/auth/google',
-//   passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
 
-// app.get('/auth/google/callback',
-//   passport.authenticate('google', { failureRedirect: '/login' }),
-//   function (req, res) {
-//     res.redirect('/');
-//   });
+app.get('/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function (req, res) {
+    res.redirect('/');
+  });
 
 
 
