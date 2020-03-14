@@ -37,18 +37,17 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
   failureRedirect: '/login'
 }), (req, res) => {
   console.log("PPPPPPPPPPPPPPPPPPPPPPPP", req.user);
-  res.json(req.user);
   let user = req.user;
   let email = user._json.email;
   let id = user.id;
-  let profilepic = user._json.profileUrl;
+  let profilepic = user._json.picture.url;
 
   userSchema.find({ $or: [{ 'email': email }, { 'id': id }] }, (err, result) => {
     if (err) {
       console.log(err);
     } else if (result.length == 0) {
-      let data = new userSchema({ 'name': this.name, '_id': id, 'profilepic': profilepic })
-      data.save((err) => {
+      let newuser = new userSchema({ 'name': this.name, '_id': id, 'profilepic': profilepic })
+      newuser.save((err) => {
         if (err) {
           console.log(err);
         } else {
@@ -58,10 +57,11 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
     } else {
       let name = result[0].name;
       let id = result[0].id;
-      let profilepic = result[0].profileUrl;
+      let profilepic = result[0].profilepic;
       if (id == undefined || null) {
         result[0].id = id;
         result[0].save((err) => {
+          if(err){}
           res.render('index.html', { name, profilepic });
         })
       }
