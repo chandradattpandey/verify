@@ -53,10 +53,10 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-app.get('/auth/google',
+router.get('/auth/google',
   passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
 
-app.get('/auth/google/callback',
+router.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function (req, res) {
     res.json({"":req.user});
