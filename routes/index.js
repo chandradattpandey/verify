@@ -50,7 +50,7 @@ passport.use(new GoogleStrategy({
 },
   function (accessToken, refreshToken, profile, done) {
 
-    return done(err, user);
+    return done(err, profile);
   }
 ));
 
