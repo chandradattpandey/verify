@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
-// var GoogleStrategy = require('passport-google-oauth').OAuthStrategy;
+var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 
 
 // facebook
