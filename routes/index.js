@@ -39,10 +39,10 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
   console.log("PPPPPPPPPPPPPPPPPPPPPPPP", req.user);
   let user = req.user;
   let email = user._json.email;
-  let id = user._json.id;
+  let id = user.id;
   let profilepic = user._json.profileUrl;
 
-  userSchema.find({$or:[{'email':email},{'id':id}]}, (err, result) => {
+  userSchema.find({ $or: [{ 'email': email }, { 'id': id }] }, (err, result) => {
     if (err) {
       console.log(err);
     } else if (result.length == 0) {
@@ -92,7 +92,49 @@ router.get('/auth/google',
 router.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function (req, res) {
-    res.json({ "": req.user });
+    let user = req.user;
+    console.log(user);
+    let name = user._json.name;
+    console.log(name);
+    let id = user.id;
+    console.log(id);
+    let email = user._json.email;
+    console.log(email);
+    let profilepic = user._json.profileUrl;
+    console.log(profilepic);
+
+    userSchema.find({ $or: [{ '_id': id }, { 'email': email }] }, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else if (result.length == 0) {
+        let data = new userSchema({ 'name': name, 'email': email, 'profilepic': profilepic })
+        data.save((err) => {
+          if (err) {
+            console.log(err);
+          } else {
+            res.render('index.html', { name, profilepic });
+          }
+        })
+      } else {
+        let name = result[0].name;
+        console.log(name);
+        let id = result[0].id;
+        console.log(id);
+        let profilepic = result[0].profilepic;
+        console.log(profilepic);
+        if (id == undefined || null) {
+          result[0].id = id;
+          result[0].save((err) => {
+            if (err) {
+              console.log(err);
+            } else {
+              res.render('index.html', { name, profilepic });
+            }
+          })
+        }
+      }
+    })
+    // res.json({ "": req.user });
   });
 
 
