@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const mongoose = require('mongoose');
+const userSchema = require('../model/schema')
 const FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth2').Strategy;
 // var TwitterStrategy = require('passport-twitter').Strategy;
@@ -40,27 +41,27 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
   let email = user._json.email;
   let id = user._json.id;
   let profile = user._json.profileUrl;
-   
-  userSchema.find([{'_id':id,'email':email}],(err,result)=>{
-    if(err){
+
+  userSchema.find([{ '_id': id, 'email': email }], (err, result) => {
+    if (err) {
       console.log(err);
-    }else if(result.length == 0){
-      let data = new userSchema({'name':this.name, '_id':id,'profilepic':profile})
-      data.save((err)=>{
-        if(err){
+    } else if (result.length == 0) {
+      let data = new userSchema({ 'name': this.name, '_id': id, 'profilepic': profile })
+      data.save((err) => {
+        if (err) {
           console.log(err);
-        }else{
-          res.render('index.html',{name,profile});
+        } else {
+          res.render('index.html', { name, profile });
         }
       })
-    }else{
+    } else {
       let name = result[0].name;
       let id = result[0].id;
       let profile = result[0].profileUrl;
-      if(id == undefined || null){
+      if (id == undefined || null) {
         result[0].id = id;
-        result[0].save((err)=>{
-          res.render('index.html',{name,profile});
+        result[0].save((err) => {
+          res.render('index.html', { name, profile });
         })
       }
     }
