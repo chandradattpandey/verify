@@ -43,9 +43,9 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
 
 
 passport.use(new GoogleStrategy({
-  clientID: GOOGLE_CLIENT_ID,
-  clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://www.example.com/auth/google/callback"
+  clientID:' 937522865024-8hhe6d25vfv3c830v36a6se293mrif86.apps.googleusercontent.com',
+  clientSecret: 'cI9FiFrWb0uurwC0Rm17CKBE',
+  callbackURL: "https://chandra-verify.herokuapp.com/auth/google/callback"
 },
   function (accessToken, refreshToken, profile, done) {
 
