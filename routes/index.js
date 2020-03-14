@@ -40,18 +40,18 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
   let user = req.user;
   let email = user._json.email;
   let id = user._json.id;
-  let profile = user._json.profileUrl;
+  let profilepic = user._json.profileUrl;
 
-  userSchema.find([{ '_id': id, 'email': email }], (err, result) => {
+  userSchema.find({$or:[{'email':email},{'id':id}]}, (err, result) => {
     if (err) {
       console.log(err);
     } else if (result.length == 0) {
-      let data = new userSchema({ 'name': this.name, '_id': id, 'profilepic': profile })
+      let data = new userSchema({ 'name': this.name, '_id': id, 'profilepic': profilepic })
       data.save((err) => {
         if (err) {
           console.log(err);
         } else {
-          res.render('index.html', { name, profile });
+          res.render('index.html', { name, profilepic });
         }
       })
     } else {
@@ -61,7 +61,7 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
       if (id == undefined || null) {
         result[0].id = id;
         result[0].save((err) => {
-          res.render('index.html', { name, profile });
+          res.render('index.html', { name, profilepic });
         })
       }
     }
