@@ -62,7 +62,10 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
         result[0].id = id;
         result[0].save((err) => {
           if(err){}
-          res.render('index.html', { name, profilepic });
+          else{
+            res.render('index.html', { name, profilepic });
+          }
+          
         })
       }
     }
