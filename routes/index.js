@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const mongoose = require('mongoose');
 const FacebookStrategy = require('passport-facebook').Strategy;
-var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
+var GoogleStrategy = require('passport-google-oauth2').Strategy;
+// var TwitterStrategy = require('passport-twitter').Strategy;
 
 
 // facebook
@@ -34,7 +36,36 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
   failureRedirect: '/login'
 }), (req, res) => {
   console.log("PPPPPPPPPPPPPPPPPPPPPPPP", req.user);
-  res.json(req.user)
+  let user = req.user;
+  let email = user._json.email;
+  let id = user._json.id;
+  let profile = user._json.profileUrl;
+   
+  userSchema.find([{'_id':id,'email':email}],(err,result)=>{
+    if(err){
+      console.log(err);
+    }else if(result.length == 0){
+      let data = new userSchema({'name':this.name, '_id':id,'profilepic':profile})
+      data.save((err)=>{
+        if(err){
+          console.log(err);
+        }else{
+          res.render('index.html',{name,profile});
+        }
+      })
+    }else{
+      let name = result[0].name;
+      let id = result[0].id;
+      let profile = result[0].profileUrl;
+      if(id == undefined || null){
+        result[0].id = id;
+        result[0].save((err)=>{
+          res.render('index.html',{name,profile});
+        })
+      }
+    }
+  })
+  // res.json(req.user)
 });
 
 
@@ -43,26 +74,50 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
 
 
 passport.use(new GoogleStrategy({
-  clientID:     '937522865024-ctk5jrpv06roe247dcdbkv0mdfsgr039.apps.googleusercontent.com',
+  clientID: '937522865024-ctk5jrpv06roe247dcdbkv0mdfsgr039.apps.googleusercontent.com',
   clientSecret: 'tdZO63XF-aRqObM8g00ULSzT',
   callbackURL: "https://chandra-verify.herokuapp.com/auth/google/callback"
 },
-function(accessToken, refreshToken, profile, done) {
- 
+  function (accessToken, refreshToken, profile, done) {
+
     return done(null, profile);
-  
-}
+
+  }
 ));
 
 router.get('/auth/google',
-  passport.authenticate('google', { scope: ['email','profile'] }));
+  passport.authenticate('google', { scope: ['email', 'profile'] }));
 
 router.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function (req, res) {
-    res.json({"":req.user});
+    res.json({ "": req.user });
   });
 
+
+// twitter
+
+
+// passport.use(new TwitterStrategy({
+//   consumerKey: TWITTER_CONSUMER_KEY,
+//   consumerSecret: TWITTER_CONSUMER_SECRET,
+//   callbackURL: "https://chandra-verify.herokuapp.com/auth/twitter/callback"
+// },
+//   function (tokenSecret, profile, done) {
+//     return done(null, profile);
+//   }
+// ));
+
+
+// router.get('/auth/twitter', passport.authenticate('twitter'));
+
+
+
+// router.get('/auth/twitter/callback',
+//   passport.authenticate('twitter', {
+//     successRedirect: '/',
+//     failureRedirect: '/login'
+//   }));
 
 
 module.exports = router;

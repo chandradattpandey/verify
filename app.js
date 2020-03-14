@@ -6,7 +6,7 @@ var logger = require('morgan');
 var passport = require('passport');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
+const mongoose = require('mongoose');
 var app = express();
 
 // view engine setup
@@ -26,6 +26,8 @@ app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
+
+
 passport.serializeUser(function(user, cb) {
   cb(null, user);
 });
@@ -33,6 +35,15 @@ passport.serializeUser(function(user, cb) {
 passport.deserializeUser(function(obj, cb) {
   cb(null, obj);
 }); 
+
+
+mongoose.connect('mongodb+srv://test_db:test123@cluster0-vtl56.mongodb.net/user?retryWrites=true&w=majority', 
+{ useNewUrlParser: true } ,(err,result)=>{
+  if(result){
+    console.log("Connected To Database")
+  }
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
