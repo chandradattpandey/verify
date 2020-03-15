@@ -28,7 +28,7 @@ router.get('/', function (req, res, next) {
 });
 
 
-router.get('/auth/facebook', passport.authenticate('facebook',{ scope: ['email'] }));
+router.get('/auth/facebook', passport.authenticate('facebook',{ scope: ['email','profilepic'] }));
 
 
 
