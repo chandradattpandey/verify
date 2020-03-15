@@ -96,7 +96,7 @@ router.get('/auth/google',
 router.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function (req, res) {
-    res.json({ "": req.user });
+    
     let user = req.user;
     console.log(user);
     let name = user._json.name;
