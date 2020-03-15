@@ -103,7 +103,7 @@ router.get('/auth/google/callback',
     console.log(name);
     let g_id = user.g_id;
     console.log(id);
-    let email = user._json.email;
+    let email = user._json.picture.email;
     console.log(email);
     let profilepic = user._json.profileUrl;
     console.log(profilepic);
@@ -112,7 +112,7 @@ router.get('/auth/google/callback',
       if (err) {
         console.log(err);
       } else if (result.length == 0) {
-        let data = new userSchema({ 'name': name, 'email': email, 'profilepic': profilepic })
+        let data = new userSchema({ 'name': name, 'g_id':g_id, 'email': email, 'profilepic': profilepic })
         data.save((err) => {
           if (err) {
             console.log(err);
