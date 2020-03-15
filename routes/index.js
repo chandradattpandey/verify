@@ -39,14 +39,14 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
   console.log("PPPPPPPPPPPPPPPPPPPPPPPP", req.user);
   let user = req.user;
   let name = user._json.email;
-  let id = user.id;
+  let f_id = user.f_id;
   let profilepic = user._json.picture.url;
 
-  userSchema.find({ $or: [{ 'email': name }, { 'f_id': id }] }, (err, result) => {
+  userSchema.find({ $or: [{ 'email': name }, { 'f_id': f_id }] }, (err, result) => {
     if (err) {
       console.log(err);
     } else if (result.length == 0) {
-      let newuser = new userSchema({ 'email': name, 'f_id': id, 'profilepic': profilepic })
+      let newuser = new userSchema({ 'email': name, 'f_id': f_id, 'profilepic': profilepic })
       newuser.save((err) => {
         if (err) {
           console.log(err);
@@ -56,10 +56,10 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
       })
     } else {
       let name = result[0].name;
-      let id = result[0].id;
+      let f_id = result[0].f_id;
       let profilepic = result[0].profilepic;
       if (id == undefined || null) {
-        result[0].id = id;
+        result[0].f_id = f_id;
         result[0].save((err) => {
           if(err){}
           else{
@@ -96,18 +96,19 @@ router.get('/auth/google',
 router.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function (req, res) {
+    res.json({ "": req.user });
     let user = req.user;
     console.log(user);
     let name = user._json.name;
     console.log(name);
-    let id = user.id;
+    let g_id = user.g_id;
     console.log(id);
     let email = user._json.email;
     console.log(email);
     let profilepic = user._json.profileUrl;
     console.log(profilepic);
 
-    userSchema.find({ $or: [{ '_id': id }, { 'email': email }] }, (err, result) => {
+    userSchema.find({ $or: [{ 'g_id': g_id }, { 'email': email }] }, (err, result) => {
       if (err) {
         console.log(err);
       } else if (result.length == 0) {
@@ -122,12 +123,12 @@ router.get('/auth/google/callback',
       } else {
         let name = result[0].name;
         console.log(name);
-        let id = result[0].id;
+        let g_id = result[0].g_id;
         console.log(id);
         let profilepic = result[0].profilepic;
         console.log(profilepic);
         if (id == undefined || null) {
-          result[0].id = id;
+          result[0].g_id = g_id;
           result[0].save((err) => {
             if (err) {
               console.log(err);
